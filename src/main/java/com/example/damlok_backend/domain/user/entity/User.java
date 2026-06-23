@@ -2,6 +2,7 @@ package com.example.damlok_backend.domain.user.entity;
 
 import com.example.damlok_backend.domain.company.entity.Company;
 import com.example.damlok_backend.global.entity.BaseEntity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +25,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String password;
 
     private String name;
@@ -35,6 +36,7 @@ public class User extends BaseEntity {
 
     private String role;
 
-    @Builder.Default
     private Boolean status = true;
+
+    private LoginType loginType = LoginType.LOCAL;
 }
