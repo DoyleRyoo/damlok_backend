@@ -1,19 +1,14 @@
 package com.example.damlok_backend.domain.user.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
-@Builder
-public class UserResponseDto {
+@Setter
+public class UserUpdateRequestDto {
 
-    private Long id;
-
-    private String email;
     private String name;
     private String phone;
     private String department;
-
     private String role;
-    private Boolean status;
 }
