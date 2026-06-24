@@ -5,15 +5,12 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserResponseDto {
+public class UserListResponseDto {
 
     private Long id;
-
     private String email;
     private String name;
     private String phone;
     private String department;
-
     private String role;
-    private Boolean status;
 }
