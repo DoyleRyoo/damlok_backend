@@ -1,5 +1,8 @@
 package com.example.damlok_backend.domain.dashboard.service;
 
+import com.example.damlok_backend.domain.actionitem.entity.ActionItem;
+import com.example.damlok_backend.domain.actionitem.repository.ActionItemRepository;
+import com.example.damlok_backend.domain.dashboard.dto.DashboardActionResponseDto;
 import com.example.damlok_backend.domain.dashboard.dto.DashboardMeetingResponseDto;
 import com.example.damlok_backend.domain.participant.entity.MeetingParticipant;
 import com.example.damlok_backend.domain.participant.repository.MeetingParticipantRepository;
@@ -13,6 +16,7 @@ import java.util.List;
 public class DashboardService {
 
     private final MeetingParticipantRepository meetingParticipantRepository;
+    private final ActionItemRepository actionItemRepository;
 
     public List<DashboardMeetingResponseDto> getRecentMeetings(Long userId) {
 
@@ -27,4 +31,18 @@ public class DashboardService {
                         .build())
                 .toList();
     }
+
+    public List<DashboardActionResponseDto> getRecentActions(Long userId) {
+
+    List<ActionItem> actionItems =
+            actionItemRepository.findByAssigneeUserId(userId);
+
+    return actionItems.stream()
+            .map(actionItem -> DashboardActionResponseDto.builder()
+                    .actionItemId(actionItem.getId())
+                    .task(actionItem.getTask())
+                    .status(actionItem.getStatus())
+                    .build())
+            .toList();
+        }
 }
