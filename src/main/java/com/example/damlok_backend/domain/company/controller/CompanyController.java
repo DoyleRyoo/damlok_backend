@@ -30,8 +30,8 @@ public class CompanyController {
 
     // company003 - 회사 조회
     @GetMapping
-    public ResponseEntity<CompanyResponseDto> getCompany(@RequestParam Long id) {
-        return ResponseEntity.ok(companyService.getCompany(id));
+    public ResponseEntity<CompanyResponseDto> getCompany() {
+        return ResponseEntity.ok(companyService.getCompany());
     }
 
     // company002 - 회사 수정 

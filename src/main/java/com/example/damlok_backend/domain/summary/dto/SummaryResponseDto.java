@@ -10,6 +10,5 @@ import lombok.Getter;
 public class SummaryResponseDto {
 
     private String objective;
-    private String discussion;
     private String decision;
 }

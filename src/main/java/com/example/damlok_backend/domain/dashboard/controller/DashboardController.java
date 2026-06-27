@@ -32,7 +32,7 @@ public class DashboardController {
     ) {
 
         return ResponseEntity.ok(
-                dashboardService.getRecentActions(uid)
+            dashboardService.getRecentActions(uid)
         );
     }
 }

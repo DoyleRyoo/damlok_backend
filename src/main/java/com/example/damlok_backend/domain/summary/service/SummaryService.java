@@ -27,7 +27,6 @@ public class SummaryService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회의 요약입니다."));
 
         summary.setObjective(dto.getObjective());
-        summary.setDiscussion(dto.getDiscussion());
         summary.setDecision(dto.getDecision());
 
         summaryRepository.save(summary);
@@ -54,7 +53,6 @@ public class SummaryService {
 
     return SummaryResponseDto.builder()
             .objective(summary.getObjective())
-            .discussion(summary.getDiscussion())
             .decision(summary.getDecision())
             .build();
     }

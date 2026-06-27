@@ -1,5 +1,7 @@
 package com.example.damlok_backend.domain.project.service;
 
+import com.example.damlok_backend.domain.company.entity.Company;
+import com.example.damlok_backend.domain.company.repository.CompanyRepository;
 import com.example.damlok_backend.domain.project.dto.CreateProjectRequestDto;
 import com.example.damlok_backend.domain.project.dto.ProjectResponseDto;
 import com.example.damlok_backend.domain.project.dto.UpdateProjectRequestDto;
@@ -18,6 +20,7 @@ import java.util.stream.Collectors;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final CompanyRepository companyRepository;
 
     // =========================
     // 1. 프로젝트 생성
@@ -25,7 +28,11 @@ public class ProjectService {
     // =========================
     public ProjectResponseDto createProject(CreateProjectRequestDto request) {
 
+        Company company = companyRepository.findById(request.getCompanyId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회사입니다."));
+
         Project project = Project.builder()
+                .company(company)
                 .title(request.getTitle())
                 .description(request.getDescription())
                 .status(ProjectStatus.ACTIVE)

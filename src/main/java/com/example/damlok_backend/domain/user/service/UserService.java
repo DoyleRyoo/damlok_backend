@@ -53,8 +53,8 @@ public class UserService {
         }
 
         // 유저 수정
+        @Transactional
         public Long updateUser(Long uid, UserUpdateRequestDto dto) {
-
         User user = userRepository.findById(uid)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
 
@@ -62,8 +62,6 @@ public class UserService {
         user.setPhone(dto.getPhone());
         user.setDepartment(dto.getDepartment());
         user.setRole(dto.getRole());
-
-        userRepository.save(user);
 
         return user.getId();
         }

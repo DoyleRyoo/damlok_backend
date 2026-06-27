@@ -8,6 +8,5 @@ import lombok.Setter;
 public class SummaryUpdateRequestDto {
 
     private String objective;
-    private String discussion;
     private String decision;
 }

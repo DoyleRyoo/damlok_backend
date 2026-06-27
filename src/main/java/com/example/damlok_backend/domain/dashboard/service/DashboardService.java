@@ -8,11 +8,13 @@ import com.example.damlok_backend.domain.participant.entity.MeetingParticipant;
 import com.example.damlok_backend.domain.participant.repository.MeetingParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DashboardService {
 
     private final MeetingParticipantRepository meetingParticipantRepository;
@@ -21,7 +23,7 @@ public class DashboardService {
     public List<DashboardMeetingResponseDto> getRecentMeetings(Long userId) {
 
         List<MeetingParticipant> meetingParticipants =
-                meetingParticipantRepository.findByProjectParticipantUserId(userId);
+                meetingParticipantRepository.findWithMeetingByProjectParticipantUserId(userId);
 
         return meetingParticipants.stream()
                 .map(meetingParticipant -> DashboardMeetingResponseDto.builder()
@@ -35,7 +37,7 @@ public class DashboardService {
     public List<DashboardActionResponseDto> getRecentActions(Long userId) {
 
     List<ActionItem> actionItems =
-            actionItemRepository.findByAssigneeUserId(userId);
+            actionItemRepository.findWithAssigneeByAssigneeUserId(userId);
 
     return actionItems.stream()
             .map(actionItem -> DashboardActionResponseDto.builder()

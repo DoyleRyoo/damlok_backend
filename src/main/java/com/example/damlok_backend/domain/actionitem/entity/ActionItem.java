@@ -16,30 +16,52 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "action_items")
+@AttributeOverrides({
+        @AttributeOverride(name = "createdAt", column = @Column(name = "action_item_created_at", nullable = false, updatable = false)),
+        @AttributeOverride(name = "updatedAt", column = @Column(name = "action_item_updated_at"))
+})
 public class ActionItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "action_item_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id")
+    @JoinColumn(name = "meeting_id", nullable = false)
     private Meeting meeting;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_participant_id")
+    @JoinColumn(name = "project_member_id", nullable = false)
     private ProjectParticipant assignee;
 
-    @Lob
+    @Column(name = "assignee_name")
+    private String assigneeName;
+
+    @Column(name = "assignee_email")
+    private String assigneeEmail;
+
+    @Column(name = "action_item_task", nullable = false, columnDefinition = "text")
     private String task;
 
+    @Column(name = "action_item_start_date", nullable = false)
     private LocalDate startDate;
 
+    @Column(name = "action_item_due_date", nullable = false)
     private LocalDate dueDate;
 
+    @Column(name = "action_item_priority", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionItemPriority priority;
 
+    @Column(name = "action_item_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private ActionItemStatus status;
+
+    @Column(name = "action_item_notion_page_id")
+    private String notionPageId;
+
+    @Column(name = "action_item_notion_page_url", columnDefinition = "text")
+    private String notionPageUrl;
 }

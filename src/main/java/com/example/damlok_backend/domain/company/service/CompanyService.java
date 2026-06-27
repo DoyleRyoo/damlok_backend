@@ -28,9 +28,9 @@ public class CompanyService {
     }
 
     // 회사 단건 조회
-    public CompanyResponseDto getCompany(Long id) {
+    public CompanyResponseDto getCompany() {
 
-        Company company = companyRepository.findById(id)
+        Company company = companyRepository.findFirstByOrderByIdAsc()
                 .orElseThrow(() -> new IllegalArgumentException("회사 없음"));
 
         return CompanyResponseDto.from(company);

@@ -1,8 +1,11 @@
 package com.example.damlok_backend.domain.summary.entity;
 
 import com.example.damlok_backend.domain.meeting.entity.Meeting;
-import com.example.damlok_backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 import lombok.*;
 
 @Getter
@@ -11,22 +14,33 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Summary extends BaseEntity {
+@Table(name = "full_summaries")
+@EntityListeners(AuditingEntityListener.class)
+public class Summary {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "summary_id")
     private Long id;
 
+    @CreatedDate
+    @Column(name = "summary_created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "meeting_id")
+    @JoinColumn(name = "meeting_id", nullable = false)
     private Meeting meeting;
 
-    @Lob
+    @Column(name = "summary_objective", nullable = false, columnDefinition = "text")
     private String objective;
 
-    @Lob
-    private String discussion;
 
-    @Lob
+    @Column(name = "summary_decision", nullable = false, columnDefinition = "text")
     private String decision;
+
+    @Column(name = "summary_notion_page_id")
+    private String notionPageId;
+
+    @Column(name = "summary_notion_page_url")
+    private String notionPageUrl;
 }

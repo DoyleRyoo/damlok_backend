@@ -1,7 +1,6 @@
 package com.example.damlok_backend.domain.notion.entity;
 
 import com.example.damlok_backend.domain.company.entity.Company;
-import com.example.damlok_backend.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,17 +9,21 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-public class Notion extends BaseEntity {
+@Table(name = "notion")
+public class Notion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notion_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @Column(name = "notion_name")
     private String name;
 
+    @Column(name = "notion_url")
     private String url;
 }

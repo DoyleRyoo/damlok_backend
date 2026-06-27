@@ -6,6 +6,7 @@ import com.example.damlok_backend.domain.user.dto.LoginRequestDto;
 import com.example.damlok_backend.domain.user.dto.SignUpRequestDto;
 import com.example.damlok_backend.domain.user.entity.User;
 import com.example.damlok_backend.domain.user.repository.UserRepository;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,6 @@ public class AuthService {
         User user = User.builder()
                 .company(company)
                 .email(request.getEmail())
-                .password(request.getPassword()) 
                 .name(request.getName())
                 .phone(request.getPhone())
                 .department(request.getDepartment())
@@ -51,9 +51,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일입니다."));
 
-        if (!user.getPassword().equals(request.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
+        user.setLastLogin(LocalDateTime.now());
 
         return user.getId();
     }
