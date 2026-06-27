@@ -4,7 +4,6 @@ import com.example.damlok_backend.domain.participant.dto.ProjectParticipantCreat
 import com.example.damlok_backend.domain.participant.dto.ProjectParticipantResponseDto;
 import com.example.damlok_backend.domain.participant.dto.ProjectParticipantStatusRequestDto;
 import com.example.damlok_backend.domain.participant.service.ProjectParticipantService;
-import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

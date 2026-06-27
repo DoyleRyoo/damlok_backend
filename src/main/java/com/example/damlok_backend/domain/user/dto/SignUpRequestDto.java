@@ -20,6 +20,8 @@ public class SignUpRequestDto {
     @NotBlank
     private String name;
     private String phone;
+    @NotBlank
     private String department;
+    @NotBlank
     private String role;
 }
