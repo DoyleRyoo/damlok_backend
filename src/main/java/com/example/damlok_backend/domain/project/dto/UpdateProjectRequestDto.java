@@ -1,5 +1,7 @@
 package com.example.damlok_backend.domain.project.dto;
 
+import com.example.damlok_backend.domain.project.enums.ProjectStatus;
+import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,5 +10,9 @@ import lombok.Setter;
 public class UpdateProjectRequestDto {
 
     private String title;
-    private String description;
+
+    @JsonAlias("description")
+    private String content;
+
+    private ProjectStatus status;
 }
