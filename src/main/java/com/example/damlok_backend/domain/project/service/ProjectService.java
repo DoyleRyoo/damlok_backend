@@ -9,6 +9,8 @@ import com.example.damlok_backend.domain.project.repository.ProjectRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,89 +21,74 @@ public class ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    // =========================
-    // 1. 프로젝트 생성
-    // POST /projects/create
-    // =========================
+    @Transactional
     public ProjectResponseDto createProject(CreateProjectRequestDto request) {
-
         Project project = Project.builder()
-                .title(request.getTitle())
-                .description(request.getDescription())
-                .status(ProjectStatus.ACTIVE)
+                .title(normalizeRequired(request.getTitle(), "Project title is required."))
+                .description(normalizeRequired(request.getContent(), "Project content is required."))
+                .status(request.getStatus() == null ? ProjectStatus.ACTIVE : request.getStatus())
                 .build();
 
         return toDto(projectRepository.save(project));
     }
 
-    // =========================
-    // 2. 프로젝트 목록
-    // GET /projects/list
-    // =========================
+    @Transactional(readOnly = true)
     public List<ProjectResponseDto> getProjectList() {
-
         return projectRepository.findAll()
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
-    // =========================
-    // 3. 프로젝트 상세
-    // GET /projects/detail?pid=2
-    // =========================
+    @Transactional(readOnly = true)
     public ProjectResponseDto getProjectDetail(Long pid) {
-
         Project project = projectRepository.findById(pid)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
         return toDto(project);
     }
 
-    // =========================
-    // 4. 프로젝트 전체 수정
-    // PUT /projects/update?pid=2
-    // =========================
+    @Transactional
     public ProjectResponseDto updateProject(Long pid, UpdateProjectRequestDto request) {
-
         Project project = projectRepository.findById(pid)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
-        if (request.getTitle() != null) {
-            project.setTitle(request.getTitle());
+        project.setTitle(normalizeRequired(request.getTitle(), "Project title is required."));
+        project.setDescription(normalizeRequired(request.getContent(), "Project content is required."));
+
+        if (request.getStatus() != null) {
+            project.setStatus(request.getStatus());
         }
 
-        if (request.getDescription() != null) {
-            project.setDescription(request.getDescription());
-        }
-
-        return toDto(projectRepository.save(project));
+        return toDto(project);
     }
 
-    // =========================
-    // 5. 프로젝트 상태 변경 (삭제 대신 ARCHIVED)
-    // PATCH /projects/status?pid=2
-    // =========================
-    public ProjectResponseDto updateProjectStatus(Long pid, ProjectStatus status) {
-
+    @Transactional
+    public ProjectResponseDto archiveProject(Long pid) {
         Project project = projectRepository.findById(pid)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
 
-        project.setStatus(status);
+        project.setStatus(ProjectStatus.ARCHIVED);
 
-        return toDto(projectRepository.save(project));
+        return toDto(project);
     }
 
-    // =========================
-    // DTO 변환
-    // =========================
     private ProjectResponseDto toDto(Project project) {
-
         return ProjectResponseDto.builder()
                 .id(project.getId())
                 .title(project.getTitle())
-                .description(project.getDescription())
+                .content(project.getDescription())
                 .status(project.getStatus())
+                .createdAt(project.getCreatedAt())
+                .updatedAt(project.getUpdatedAt())
                 .build();
+    }
+
+    private String normalizeRequired(String value, String message) {
+        if (!StringUtils.hasText(value)) {
+            throw new IllegalArgumentException(message);
+        }
+
+        return value.trim();
     }
 }

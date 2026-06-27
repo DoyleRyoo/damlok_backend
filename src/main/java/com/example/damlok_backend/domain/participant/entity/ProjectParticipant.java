@@ -15,26 +15,46 @@ import lombok.*;
 @Builder
 @Entity
 @Table(name = "project_participant")
+@AttributeOverrides({
+        @AttributeOverride(name = "createdAt", column = @Column(name = "created_at", nullable = false, updatable = false)),
+        @AttributeOverride(name = "updatedAt", column = @Column(name = "updated_at"))
+})
 public class ProjectParticipant extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
     private ProjectMemberRole role;
-    
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private ProjectMemberStatus status;
-    
+
     @Enumerated(EnumType.STRING)
+    @Column(name = "grade", nullable = false)
     private ProjectMemberGrade grade;
+
+    public void updateStatus(ProjectMemberStatus status) {
+        this.status = status;
+    }
+
+    public void updateRole(ProjectMemberRole role) {
+        this.role = role;
+    }
+
+    public void updateGrade(ProjectMemberGrade grade) {
+        this.grade = grade;
+    }
 }
